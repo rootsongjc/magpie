@@ -1,4 +1,6 @@
-#Yarn On Docker
+#Magpie is a Yarn On Docker hadoop system.
+
+<img alt="Magpie" src="docs/img/magpie_logo.png">
 
 Build and run an yarn cluster on docker, pass the config item to hadoop configuration files through docker ENV.
 
