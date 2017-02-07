@@ -5,7 +5,7 @@
 Magpie is a command line tool for deploying and  managing the Yarn on Docker cluster.
 Build and run an yarn cluster on docker, pass the config item to hadoop configuration files through docker ENV.
 
-###How to build and runthe docker image step by step?
+###How to build the docker image and run a container step by step?
 
 - Step1
 
@@ -25,7 +25,7 @@ Build and run an yarn cluster on docker, pass the config item to hadoop configur
 
 - Stop4
 
-  Run a container with sepecific ENV passed to it.
+  Run a container with sepecific ENV.
 
 
 
@@ -38,7 +38,7 @@ Edit Dockerfile and change the base image to your own JDK7 image.
 docker build -t hadoop-yarn:v0.1 .
 ```
 
-###Run image
+###Run a container
 
 For example
 
@@ -47,7 +47,7 @@ With hadoop ha
 ```
 docker run -d -e NAMESERVICE=addmp -e ACTIVE_NAMENODE_ID=namenode29 -e STANDBY_NAMENODE_ID=namenode63 -e HA_ZOOKEEPER_QUORUM=192.168.0.1:2181,192.168.0.2:2181,192.168.0.3:2181 -e YARN_ZK_DIR=rmstore -e YARN_CLUSTER_ID= yarnRM -e YARN_RM1_IP=192.168.0.3 -e YARN_RM2_IP=192.168.0.2 -e YARN_JOBHISTORY_IP=192.168.0.3 -e ACTIVE_NAMENODE_IP=192.168.0.1 -e STANDBY_NAMENODE_IP=192.168.0.2  -e HA=yes hadoop-yarn:v0.1 resourcemanager
 
-docker run -d -e NAMESERVICE=addmp -e ACTIVE_NAMENODE_ID=namenode29 -e STANDBY_NAMENODE_ID=namenode63 -e HA_ZOOKEEPER_QUORUM=192.168.0.1:2181,192.168.0.2:2181,172.16.    20.52:2181 -e YARN_ZK_DIR=rmstore -e YARN_CLUSTER_ID= yarnRM -e YARN_RM1_IP=192.168.0.3 -e YARN_RM2_IP=192.168.0.2 -e YARN_JOBHISTORY_IP=192.168.0.3 -e ACTIVE_NAMENODE_IP=192.168.0.1 -e STANDBY_NAMENODE_IP=192.168.0.2  -e HA=yes hadoop-yarn:v0.1 nodemanager
+docker run -d -e NAMESERVICE=addmp -e ACTIVE_NAMENODE_ID=namenode29 -e STANDBY_NAMENODE_ID=namenode63 -e HA_ZOOKEEPER_QUORUM=192.168.0.1:2181,192.168.0.2:2181,192.168.0.3:2181 -e YARN_ZK_DIR=rmstore -e YARN_CLUSTER_ID= yarnRM -e YARN_RM1_IP=192.168.0.3 -e YARN_RM2_IP=192.168.0.2 -e YARN_JOBHISTORY_IP=192.168.0.3 -e ACTIVE_NAMENODE_IP=192.168.0.1 -e STANDBY_NAMENODE_IP=192.168.0.2  -e HA=yes hadoop-yarn:v0.1 nodemanager
 ```
 
 Without hadoop ha
