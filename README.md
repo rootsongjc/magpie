@@ -216,7 +216,7 @@ You need to install [goxc](https://github.com/laher/goxc) by yourself.
 
 ###About
 
-Author: [Jimmy Song](rootsongjc@gmail.com)
+Author: Jimmy Song wechat account:jimmysong rootsongjc@gmail.com
 
 *FYI: If you want to create a yarn cluster with multiple nodemanagers, you need a docker plugins to make the docker container on different hosts can be accessed with each others.*
 You need a docker ipam plugin to make the continers located on different hosts can be accessed by each others. 
