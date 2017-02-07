@@ -6,12 +6,12 @@ go:
 go_import_path: github.com/rootsongjc/magpie
 
 install: 
-    go get github.com/spf13/cobra
-    go get github.com/spf13/viper
-    go get github.com/samalba/dockerclient
-    go get github.com/fsouza/go-dockerclient
-    go get gopkg.in/fatih/set.v0
-    go get github.com/bitly/go-simplejson
+    - go get github.com/spf13/cobra
+    - go get github.com/spf13/viper
+    - go get github.com/samalba/dockerclient
+    - go get github.com/fsouza/go-dockerclient
+    - go get gopkg.in/fatih/set.v0
+    - go get github.com/bitly/go-simplejson
 
 script:
     - go run main.go
