@@ -195,6 +195,14 @@ goxc -d=build -pv=1.0.0 -bc='linux,darwin' -arch='amd64'
 
 You need to install [goxc](https://github.com/laher/goxc) by yourself.
 
+###TODO
+
+- The base container should be definited in configuration file first
+- Scale and flux the yarn cluster automatically
+- Nodemanager registered on resourcemanager repeatability
+- Need a command to create a new yarn cluster
+
+
 ###Reference
 
 [Docker remote API version 1.23]( https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/)
@@ -204,7 +212,7 @@ You need to install [goxc](https://github.com/laher/goxc) by yourself.
 
 [Swarm API version 1.2.2](https://docs.docker.com/swarm/swarm-api/)
 
-[Shrik - A docker network plugin](https://github.com/TalkingData/Shrike)
+[Shrike - A docker network plugin](https://github.com/TalkingData/Shrike)
 
 ###About
 
