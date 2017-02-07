@@ -1,10 +1,11 @@
-#Magpie is a Yarn On Docker hadoop system.
+![magpie logo](doc/img/magpie_logo_small.png)
 
-<img alt="Magpie" src="docs/img/magpie_logo.png">
+#Magpie
 
+Magpie is a command line tool for deploying and  managing the Yarn on Docker cluster.
 Build and run an yarn cluster on docker, pass the config item to hadoop configuration files through docker ENV.
 
-###How the image was build and run?
+###How to build and runthe docker image step by step?
 
 - Step1
 
@@ -44,17 +45,17 @@ For example
 With hadoop ha
 
 ```
-docker run -d -e NAMESERVICE=addmp -e ACTIVE_NAMENODE_ID=namenode29 -e STANDBY_NAMENODE_ID=namenode63 -e HA_ZOOKEEPER_QUORUM=172.16.20.50:2181,172.16.20.51:2181,172.16.20.52:2181 -e YARN_ZK_DIR=rmstore -e YARN_CLUSTER_ID= yarnRM -e YARN_RM1_IP=172.16.20.52 -e YARN_RM2_IP=172.16.20.51 -e YARN_JOBHISTORY_IP=172.16.20.52 -e ACTIVE_NAMENODE_IP=172.16.20.50 -e STANDBY_NAMENODE_IP=172.16.20.51  -e HA=yes hadoop-yarn:v0.1 resourcemanager
+docker run -d -e NAMESERVICE=addmp -e ACTIVE_NAMENODE_ID=namenode29 -e STANDBY_NAMENODE_ID=namenode63 -e HA_ZOOKEEPER_QUORUM=192.168.0.1:2181,192.168.0.2:2181,192.168.0.3:2181 -e YARN_ZK_DIR=rmstore -e YARN_CLUSTER_ID= yarnRM -e YARN_RM1_IP=192.168.0.3 -e YARN_RM2_IP=192.168.0.2 -e YARN_JOBHISTORY_IP=192.168.0.3 -e ACTIVE_NAMENODE_IP=192.168.0.1 -e STANDBY_NAMENODE_IP=192.168.0.2  -e HA=yes hadoop-yarn:v0.1 resourcemanager
 
-docker run -d -e NAMESERVICE=addmp -e ACTIVE_NAMENODE_ID=namenode29 -e STANDBY_NAMENODE_ID=namenode63 -e HA_ZOOKEEPER_QUORUM=172.16.20.50:2181,172.16.20.51:2181,172.16.    20.52:2181 -e YARN_ZK_DIR=rmstore -e YARN_CLUSTER_ID= yarnRM -e YARN_RM1_IP=172.16.20.52 -e YARN_RM2_IP=172.16.20.51 -e YARN_JOBHISTORY_IP=172.16.20.52 -e ACTIVE_NAMENO    DE_IP=172.16.20.50 -e STANDBY_NAMENODE_IP=172.16.20.51  -e HA=yes hadoop-yarn:v0.1 nodemanager
+docker run -d -e NAMESERVICE=addmp -e ACTIVE_NAMENODE_ID=namenode29 -e STANDBY_NAMENODE_ID=namenode63 -e HA_ZOOKEEPER_QUORUM=192.168.0.1:2181,192.168.0.2:2181,172.16.    20.52:2181 -e YARN_ZK_DIR=rmstore -e YARN_CLUSTER_ID= yarnRM -e YARN_RM1_IP=192.168.0.3 -e YARN_RM2_IP=192.168.0.2 -e YARN_JOBHISTORY_IP=192.168.0.3 -e ACTIVE_NAMENODE_IP=192.168.0.1 -e STANDBY_NAMENODE_IP=192.168.0.2  -e HA=yes hadoop-yarn:v0.1 nodemanager
 ```
 
 Without hadoop ha
 
 ```
-docker run -d -e NANENODE_IP=172.16.31.63 -e RESOURCEMANAGER_IP=172.16.31.63 -e YARN_JOBHISTORY_IP=172.16.31.63 -e HA=no hadoop-yarn:v0.1 resourcemanager
+docker run -d -e NANENODE_IP=192.168.0.1 -e RESOURCEMANAGER_IP=192.168.0.1 -e YARN_JOBHISTORY_IP=192.168.0.1 -e HA=no hadoop-yarn:v0.1 resourcemanager
 
-docker run -d -e NANENODE_IP=172.16.31.63 -e RESOURCEMANAGER_IP=172.16.31.63 -e YARN_JOBHISTORY_IP=172.16.31.63 -e HA=no hadoop-yarn:v0.1 nodemanager
+docker run -d -e NANENODE_IP=192.168.0.1 -e RESOURCEMANAGER_IP=192.168.0.1 -e YARN_JOBHISTORY_IP=192.168.0.1 -e HA=no hadoop-yarn:v0.1 nodemanager
 ```
 
 ###ENV included with hadoop HA 
@@ -97,39 +98,112 @@ docker run -d -e NANENODE_IP=172.16.31.63 -e RESOURCEMANAGER_IP=172.16.31.63 -e 
 
 - NODEMANAGER_MEMORY_MB
 
-##Management Tool Magpie - A Yarn on Docker Operation Tool
+  ​
 
-##Precondition
+##Magpie CLI management Tool
+
+###Precondition
 - No-password login to all the active resource managers.
 - Docker container's name must contain the cluster name.
 
-###Configuration
-conf/conf.ini
-The flowing item need to be configured.
-- Python
-- Cluster names
-- Resource managers' ip address.
-- Shipyard
-- Swarm
+###Usage
 
-###Run
-./magpie.py -h
+magpie -h for help usage.
+
+```Magpie is  a  CLI tool to manage the Yarn on Docker cluster.
+ 
+ Magpie can be used to inspect the docker,swarm and yarn cluster status, scale the yarn cluster and decommising
+ nodemanagers or delete the existed containers.
+ 
+ Usage:
+   magpie [command]
+ 
+ Available Commands:
+   docker      Docker cluster management tool.
+   tool        Other management tool.
+   yarn        Yarn cluster management tool.
+ 
+ Flags:
+       --config string   config file (default is conf/magpie.toml)
+   -t, --toggle          Help message for toggle
+ 
+ Use "magpie [command] --help" for more information about a command.
+```
+
+![magpie_commands](doc/img/magpie_commands.png)
+
+###Configuration
+
+Magpie use [viper](https://github.com/spf13/viper)  to resolve the [toml](https://github.com/toml-lang/toml) configuration file. 
+
+Config file default located at ./conf/magpie.toml
+
+You can user —config to sepcify your custom configuration file directory.
+
+### Configuration file example###
+
+```
+[clusters]
+#Yarn clsuter name
+cluster_name = ["yarn1","yarn2","yarn3"]
+#Swarm master ip address
+swarm_master_ip = "192.168.0.1"
+swarm_master_port = "4000"
+
+[resource_managers]
+#Yarn active resourcemanager ip address
+yarn1 = "172.18.0.2"
+yarn2 = "172.18.0.3"
+yarn3 = "172.18.0.4"
+
+[base_container]
+#Base container used for scale the yarn cluster 
+yarn1 = "yarn1-nm1"
+yarn2 = "yarn2-nm1"
+yarn3 = "yarn3-nm1"
+```
+
+###Feature
+
+- Inspect the swarm cluster status.
+- Inspect the yarn clsuter status.
+- Inspect the docker contianer status include contianer's host config and config items.
+- Delete docker containers.
+- Offline or decomissing yarn nodemanagers.
+- Scaling yarn cluster.
+
+###Build
+**Build environment**
+
+go 1.7.4 adm64
+
+**Build magpie on your own platform**
+
+```
+go build -o magpie main.go
+```
+
+**Build for multi-platform**
+```
+goxc -d=build -pv=1.0.0 -bc='linux,darwin' -arch='amd64'
+```
+
+You need to install [goxc](https://github.com/laher/goxc) by yourself.
 
 ###Reference
 
-Docker remote API: https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/
+[Docker remote API version 1.23]( https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/)
 
-Shipyard API: http://shipyard-project.com/docs/api/
 
-YARN RESTful API: https://hadoop.apache.org/docs/r2.6.0/hadoop-yarn/hadoop-yarn-site/ResourceManagerRest.html
+[YARN RESTful API version 2.6.0]( https://hadoop.apache.org/docs/r2.6.0/hadoop-yarn/hadoop-yarn-site/ResourceManagerRest.html)
 
-Swarm API: https://docs.docker.com/swarm/swarm-api/
+[Swarm API version 1.2.2](https://docs.docker.com/swarm/swarm-api/)
 
-Docker network plugin: https://github.com/TalkingData/Shrike
+[Shrik - A docker network plugin](https://github.com/TalkingData/Shrike)
 
 ###About
 
-Author: rootsongjc@gmail.com
+Author: Jimmy Song rootsongjc@gmail.com
 
 *FYI: If you want to create a yarn cluster with multiple nodemanagers, you need a docker plugins to make the docker container on different hosts can be accessed with each others.*
 You need a docker ipam plugin to make the continers located on different hosts can be accessed by each others. 

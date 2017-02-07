@@ -1,0 +1,25 @@
+[clusters]
+#Yarn clsuter name
+cluster_name = ["yarn1","yarn2","yarn3","yarn4","yarn5","yarn6"]
+#Swarm master ip address
+swarm_master_ip = "172.18.0.1"
+swarm_master_port = "4000"
+
+[resource_managers]
+#Yarn active resourcemanager ip address
+yarn1 = "172.18.0.5"
+yarn2 = "172.18.0.7"
+yarn3 = "172.18.0.9"
+yarn4 = "172.18.0.11"
+yarn5 = "172.18.0.13"
+yarn6 = "172.18.0.15"
+
+[base_container]
+#Base container used for scale the yarn cluster 
+yarn1 = "yarn1-20161009-nm15"
+yarn2 = "yarn2-nm2"
+yarn3 = "yarn3-nm1"
+yarn4 = "yarn4-20161116-nm1"
+yarn5 = "yarn5-nm1"
+yarn6 = "yarn6-20160901-nm61"
+
