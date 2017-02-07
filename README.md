@@ -108,9 +108,10 @@ docker run -d -e NANENODE_IP=192.168.0.1 -e RESOURCEMANAGER_IP=192.168.0.1 -e YA
 
 ###Usage
 
-magpie -h for help usage.
+Use magpie -h for help usage.
 
-```Magpie is  a  CLI tool to manage the Yarn on Docker cluster.
+```
+Magpie is  a  CLI tool to manage the Yarn on Docker cluster.
  
  Magpie can be used to inspect the docker,swarm and yarn cluster status, scale the yarn cluster and decommising
  nodemanagers or delete the existed containers.
@@ -173,6 +174,7 @@ yarn3 = "yarn3-nm1"
 - Scaling yarn cluster.
 
 ###Build
+
 **Build environment**
 
 go 1.7.4 adm64
