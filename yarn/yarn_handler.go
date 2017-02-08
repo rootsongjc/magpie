@@ -7,6 +7,8 @@ import (
 	"github.com/bitly/go-simplejson"
 	"github.com/rootsongjc/magpie/docker"
 	"github.com/rootsongjc/magpie/utils"
+	"github.com/samalba/dockerclient"
+	"github.com/spf13/viper"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -237,4 +239,82 @@ func Offline_host(hostname string) {
 	}
 	Decommis_nodemanagers(nms)
 	docker.Delete_containers_on_host(hostname)
+}
+
+//Create a new nodemanager and start it
+func Create_new_nodemanager(nm_config Nodemanager_config) {
+	swarm_master_ip := viper.GetString("clusters.swarm_master_ip")
+	swarm_master_port := viper.GetString("clusters.swarm_master_port")
+	endpoint := "tcp://" + swarm_master_ip + ":" + swarm_master_port
+	client, err := dockerclient.NewDockerClient(endpoint, nil)
+	if err != nil {
+		panic(err)
+	}
+	if err != nil {
+		fmt.Println("Cannot connect to the swarm master.")
+	}
+	fmt.Println("Creating new nodemanager container...")
+	env := []string{
+		"HA=" + get_nodemanager_config(nm_config.HA, "HA"),
+		"NAMESERVICE=" + get_nodemanager_config(nm_config.NAMESERVICE, "NAMESERVICE"),
+		"ACTIVE_NAMENODE_IP=" + get_nodemanager_config(nm_config.ACTIVE_NAMENODE_IP, "ACTIVE_NAMENODE_IP"),
+		"STANDBY_NAMENODE_IP=" + get_nodemanager_config(nm_config.STANDBY_NAMENODE_IP, "STANDBY_NAMENODE_IP"),
+		"ACTIVE_NAMENODE_ID=" + get_nodemanager_config(nm_config.ACTIVE_NAMENODE_ID, "ACTIVE_NAMENODE_ID"),
+		"STANDBY_NAMENODE_ID=" + get_nodemanager_config(nm_config.STANDBY_NAMENODE_ID, "STANDBY_NAMENODE_ID"),
+		"HA_ZOOKEEPER_QUORUM=" + get_nodemanager_config(nm_config.HA_ZOOKEEPER_QUORUM, "HA_ZOOKEEPER_QUORUM"),
+		"NAMENODE_IP=" + get_nodemanager_config(nm_config.NAMENODE_IP, "NAMENODE_IP"),
+		"RESOURCEMANAGER_IP=" + get_nodemanager_config(nm_config.RESOURCEMANAGER_IP, "RESOURCEMANAGER_IP"),
+		"YARN_RM1_IP=" + nm_config.YARN_RM1_IP,
+		"YARN_RM2_IP=" + nm_config.YARN_RM2_IP,
+		"YARN_JOBHISTORY_IP=" + nm_config.YARN_JOBHISTORY_IP,
+		"CPU_CORE_NUM=" + get_nodemanager_config(nm_config.CPU_CORE_NUM, "CPU_CORE_NUM"),
+		"NODEMANAGER_MEMORY_MB=" + get_nodemanager_config(nm_config.NODEMANAGER_MEMORY_MB, "NODEMANAGER_MEMORY_MB"),
+		"YARN_CLUSTER_ID=" + nm_config.YARN_CLUSTER_ID,
+		"YARN_ZK_DIR=" + nm_config.YARN_ZK_DIR,
+		//"PATH=/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/java/bin://usr/local/java/jre/bin",
+	}
+	hostConifg := dockerclient.HostConfig{
+		CpuShares:   nm_config.Limit_cpus,
+		Memory:      nm_config.Limit_memory_mb * 1024 * 1024, //transform to Byte
+		NetworkMode: nm_config.Network_mode,
+	}
+	var config *dockerclient.ContainerConfig
+	config = new(dockerclient.ContainerConfig)
+	config.Image = get_nodemanager_config(nm_config.Image, "image")
+	config.Env = env
+
+	//inherit Cmd and Entrypoint settings from docker Image or set them on config file
+	config.Cmd = viper.GetStringSlice("nodemanager.cmd")
+	config.Entrypoint = viper.GetStringSlice("nodemanager.entrypoint")
+	config.HostConfig = hostConifg
+
+	id, err := client.CreateContainer(config, "", nil)
+	if err != nil {
+		panic(err)
+	}
+	container_name := id[0:12]
+	fmt.Println("Container", container_name, "created.")
+
+	if nm_config.Container_name != "" {
+		err = client.RenameContainer(container_name, nm_config.Container_name)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("Rename container name to", nm_config.Container_name)
+	}
+	err = client.StartContainer(id, nil)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Started.")
+
+}
+
+//Get nodemanger configuration item from config file
+//If no config specify throught the command line,use the default settings
+func get_nodemanager_config(nm string, config string) string {
+	if nm == "" {
+		return viper.GetString("nodemanager." + config)
+	}
+	return nm
 }

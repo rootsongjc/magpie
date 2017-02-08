@@ -15,8 +15,8 @@
 package cmd
 
 import (
-	"github.com/spf13/cobra"
 	"github.com/rootsongjc/magpie/yarn"
+	"github.com/spf13/cobra"
 )
 
 var offhost string

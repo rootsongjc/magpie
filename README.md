@@ -175,6 +175,7 @@ yarn3 = "yarn3-nm1"
 - Delete docker containers.
 - Offline or decomissing yarn nodemanagers.
 - Scaling yarn cluster.
+- Add a yarn create command to create a new yarn nodemanager for other yarn cluster.
 
 ###Build
 
@@ -200,7 +201,6 @@ You need to install [goxc](https://github.com/laher/goxc) by yourself.
 - The base container should be definited in configuration file first
 - Scale and flux the yarn cluster automatically
 - Nodemanager registered on resourcemanager repeatability
-- Need a command to create a new yarn cluster
 
 
 ###Reference
