@@ -1,25 +1,42 @@
 [clusters]
 #Yarn clsuter name
-cluster_name = ["yarn1","yarn2","yarn3","yarn4","yarn5","yarn6"]
+cluster_name = ["yarn1","yarn2","yarn3"]
 #Swarm master ip address
-swarm_master_ip = "172.18.0.1"
+swarm_master_ip = "192.168.0.1"
 swarm_master_port = "4000"
 
 [resource_managers]
 #Yarn active resourcemanager ip address
-yarn1 = "172.18.0.5"
-yarn2 = "172.18.0.7"
-yarn3 = "172.18.0.9"
-yarn4 = "172.18.0.11"
-yarn5 = "172.18.0.13"
-yarn6 = "172.18.0.15"
+yarn1 = "192.168.0.1"
+yarn2 = "192.168.0.2"
+yarn3 = "192.168.0.3"
 
 [base_container]
 #Base container used for scale the yarn cluster 
-yarn1 = "yarn1-20161009-nm15"
-yarn2 = "yarn2-nm2"
+yarn1 = "yarn1-nm1"
+yarn2 = "yarn2-nm1"
 yarn3 = "yarn3-nm1"
-yarn4 = "yarn4-20161116-nm1"
-yarn5 = "yarn5-nm1"
-yarn6 = "yarn6-20160901-nm61"
 
+[nodemanager]
+#Nodemanager default config
+HA = "yes"
+NAMESERVICE = "dcnameservice"
+ACTIVE_NAMENODE_IP= "namenode-001.test.com"
+STANDBY_NAMENODE_IP = "namenode-002.test.com"
+ACTIVE_NAMENODE_ID = "namenode1"
+STANDBY_NAMENODE_ID = "namenode2"
+HA_ZOOKEEPER_QUORUM = "zk-001.test.com:2181,zk-002.test.com:2181,zk-003.test.com:2181"
+YARN_ZK_DIR = ""
+YARN_CLUSTER_ID = ""
+YARN_RM1_IP = ""
+YARN_RM2_IP = ""
+YARN_JOBHISTORY_IP = ""
+NAMENODE_IP = ""
+RESOURCEMANAGER_IP = ""
+CPU_CORE_NUM = 4
+NODEMANAGER_MEMORY_MB = 8192
+network_mode = "mynet"
+limit_cpus = 5
+limit_memory_mb = 12288
+image = "docker-registry:5000/library/hadoop-yarn:v0.1"
+cmd = ["nodemanager"]
