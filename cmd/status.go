@@ -24,7 +24,6 @@ import (
 )
 
 var distribute bool
-var inspect bool
 var view bool
 var statusCmd = &cobra.Command{
 	Use:   "status",
@@ -32,10 +31,8 @@ var statusCmd = &cobra.Command{
 	Long:  "Get the resource usage, node status of yarn cluster.",
 	Run: func(cmd *cobra.Command, args []string) {
 		cluster_names := viper.GetStringSlice("clusters.cluster_name")
-		if inspect == false && distribute == false && view == false {
+		if distribute == false && view == false {
 			fmt.Println("Use -i to inspect the docker cluster\nUse -d to show the docker distribution.\nUse -v to show the yarn cluster distribution")
-		}
-		if inspect == true {
 			if clustername == "" {
 				yarn.Get_yarn_status(cluster_names)
 			} else {
@@ -75,7 +72,6 @@ func init() {
 	yarnCmd.AddCommand(statusCmd)
 
 	statusCmd.Flags().StringVarP(&clustername, "clustername", "c", "", "Yarn cluster name")
-	statusCmd.Flags().BoolVarP(&inspect, "status", "s", false, "Show the yarn cluster overview")
 	statusCmd.Flags().BoolVarP(&distribute, "distribute", "d", false, "Yarn nodemanager distribution")
 	statusCmd.Flags().BoolVarP(&view, "view", "v", false, "Show the yarn cluster containers view")
 
