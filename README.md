@@ -142,11 +142,13 @@ Magpie use [viper](https://github.com/spf13/viper)  to resolve the [toml](https:
 
 Config file default located at ./conf/magpie.toml
 
-You can user —config to sepcify your custom configuration file directory.
+You can use --config to sepcify your custom configuration file.
 
 ### Configuration file example###
 
-```
+Most configuration items are inherited from docker image, you don't need to specify in the configuration file, unless you want to modify the docker environment variables in the image.
+
+```Toml
 [clusters]
 #Yarn clsuter name
 cluster_name = ["yarn1","yarn2","yarn3"]
@@ -209,12 +211,12 @@ go 1.7.4 adm64
 
 **Build magpie on your own platform**
 
-```
+```Shell
 go build -o magpie main.go
 ```
 
 **Build for multi-platform**
-```
+```Shell
 goxc -d=build -pv=1.0.0 -bc='linux,darwin' -arch='amd64'
 ```
 
@@ -235,8 +237,6 @@ You need to install [goxc](https://github.com/laher/goxc) by yourself.
 [YARN RESTful API version 2.6.0]( https://hadoop.apache.org/docs/r2.6.0/hadoop-yarn/hadoop-yarn-site/ResourceManagerRest.html)
 
 [Swarm API version 1.2.2](https://docs.docker.com/swarm/swarm-api/)
-
-[Shrike - A docker network plugin](https://github.com/TalkingData/Shrike)
 
 ###About
 
