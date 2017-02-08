@@ -165,6 +165,30 @@ yarn3 = "172.18.0.4"
 yarn1 = "yarn1-nm1"
 yarn2 = "yarn2-nm1"
 yarn3 = "yarn3-nm1"
+
+[nodemanager]
+#Nodemanager default config
+HA = "yes"
+NAMESERVICE = "dcnameservice"
+ACTIVE_NAMENODE_IP= "namenode-001.test.com"
+STANDBY_NAMENODE_IP = "namenode-002.test.com"
+ACTIVE_NAMENODE_ID = "namenode1"
+STANDBY_NAMENODE_ID = "namenode2"
+HA_ZOOKEEPER_QUORUM = "zk-001.test.com:2181,zk-002.test.com:2181,zk-003.test.com:2181"
+YARN_ZK_DIR = ""
+YARN_CLUSTER_ID = ""
+YARN_RM1_IP = ""
+YARN_RM2_IP = ""
+YARN_JOBHISTORY_IP = ""
+NAMENODE_IP = ""
+RESOURCEMANAGER_IP = ""
+CPU_CORE_NUM = 4
+NODEMANAGER_MEMORY_MB = 8192
+network_mode = "mynet"
+limit_cpus = 5
+limit_memory_mb = 12288
+image = "docker-registry:5000/library/hadoop-yarn:v0.1"
+cmd = ["nodemanager"]
 ```
 
 ###Feature
