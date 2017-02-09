@@ -32,7 +32,6 @@ var statusCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		cluster_names := viper.GetStringSlice("clusters.cluster_name")
 		if distribute == false && view == false {
-			fmt.Println("Use -i to inspect the docker cluster\nUse -d to show the docker distribution.\nUse -v to show the yarn cluster distribution")
 			if clustername == "" {
 				yarn.Get_yarn_status(cluster_names)
 			} else {
@@ -45,6 +44,8 @@ var statusCmd = &cobra.Command{
 				names := []string{clustername}
 				docker.Get_docker_status(names)
 			}
+			fmt.Println("============NODEMANAGER AND DOCKER CONTAINERS COMPARATION===========")
+			fmt.Println("CLUSTER\tNODEMANAGER\tCONTAINER\tRESULT")
 			if clustername == "" {
 				for _, c := range cluster_names {
 					tool.Compare_yarn_docker_cluster(c)

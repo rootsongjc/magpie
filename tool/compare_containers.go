@@ -9,6 +9,7 @@ import (
 	"gopkg.in/fatih/set.v0"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -49,22 +50,17 @@ func Compare_yarn_docker_cluster(clustername string) {
 			nodemanagers.Add(hostname)
 		}
 	}
-	fmt.Println("Cluster:", clustername, " NodeManager number:", nodemanagers.Size(), " Contaienr number:", dockercontainers.Size())
+	var result string
+	result = clustername + "\t" + strconv.Itoa(nodemanagers.Size()) + "\t" + strconv.Itoa(dockercontainers.Size())
 	if dockercontainers.Size() > nodemanagers.Size() {
-		more := dockercontainers.Size() - nodemanagers.Size()
-		fmt.Println("More ", more, " docker containers than active nodemanagers.")
 		diff := set.Difference(dockercontainers, nodemanagers)
-		fmt.Println(diff)
-		fmt.Println("--------------------------------------------------------------------")
+		result = result + "\t" + diff.String()
 	} else if dockercontainers.Size() == nodemanagers.Size() {
-		fmt.Println("The same.")
-		fmt.Println("--------------------------------------------------------------------")
+		result = result + "\t" + "OK"
 	} else if dockercontainers.Size() < nodemanagers.Size() {
-		more := nodemanagers.Size() - dockercontainers.Size()
-		fmt.Println("More", more, " active nodemanagers than docker containers.")
 		diff := set.Difference(nodemanagers, dockercontainers)
-		fmt.Println(diff)
-		fmt.Println("--------------------------------------------------------------------")
+		result = result + "\t" + diff.String()
 	}
+	fmt.Println(result)
 
 }

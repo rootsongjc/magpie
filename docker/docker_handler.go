@@ -83,12 +83,11 @@ func Delete_container(id string, wg *sync.WaitGroup) {
 		panic(err)
 	}
 	fmt.Println("Removal " + id + " in progress...")
-	err = client.RemoveContainer(dc.RemoveContainerOptions{ID: id})
-	if err == nil {
-		fmt.Println("Remove ", id, " OK")
-	} else {
-		fmt.Println(err)
+	err = client.RemoveContainer(dc.RemoveContainerOptions{ID: id, Force: true})
+	if err != nil {
+		panic(err)
 	}
+	fmt.Println("Remove ", id, " OK")
 }
 
 //Delete all the docker containers on the host.
