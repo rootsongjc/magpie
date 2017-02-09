@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"github.com/Sirupsen/logrus"
 	"github.com/bitly/go-simplejson"
 	"github.com/rootsongjc/magpie/docker"
 	"github.com/rootsongjc/magpie/utils"
@@ -16,6 +17,7 @@ import (
 	"sort"
 	"strings"
 	"sync"
+	"time"
 )
 
 type YarnStatus struct {
@@ -213,16 +215,20 @@ func Decommis_nodemanagers_through_file(nodefile string) {
 
 //Decommising the nodemanagers of a yarn
 func decommis_yarn_nodes(clustername string, nodemanagers string, wg *sync.WaitGroup) {
-	defer wg.Done()
+	if wg != nil {
+		defer wg.Done()
+	}
+	logger := utils.Logger()
 	fmt.Println(clustername, nodemanagers)
+	logger.WithFields(logrus.Fields{"Time": time.Now(), "Cluster": clustername, "Nodemanagers": strings.Replace(nodemanagers, "\n", ",", -1), "Action": "DECOM"}).Info("Decomissing nodemanagers " + nodemanagers)
 	resource_manager_ip := utils.Clustername2ip(clustername)
+	nodemanger_exclude_file := viper.GetString("clusters.nodemanager_exclude_file")
 	//command := "ssh -n root@" + resource_manager_ip + ` "echo -e '` + nodemanagers + `'>>/usr/local/hadoop/etc/hadoop/test.txt"`
-	command := "ssh -n jingchao.song@" + "172.20.0.6" + ` "echo -e '` + nodemanagers + `'>>~/docker/` + clustername + `"`
+	command := "ssh -n jingchao.song@" + "172.20.0.6" + ` "echo -e '` + nodemanagers + `'>>` + nodemanger_exclude_file + `"`
+	//TODO should return result and error handler
 	utils.Run_command(command)
-	//fmt.Println(command)
 	command = "ssh -n root@" + resource_manager_ip + ` 'su - hadoop -c "yarn rmadmin -refreshNodes"'`
-	//utils.Run_command(command)
-	fmt.Println(command)
+	utils.Run_command(command)
 
 }
 
@@ -247,6 +253,7 @@ func Create_new_nodemanager(nm_config Nodemanager_config) {
 	swarm_master_port := viper.GetString("clusters.swarm_master_port")
 	endpoint := "tcp://" + swarm_master_ip + ":" + swarm_master_port
 	client, err := dockerclient.NewDockerClient(endpoint, nil)
+	logger := utils.Logger()
 	if err != nil {
 		panic(err)
 	}
@@ -287,26 +294,31 @@ func Create_new_nodemanager(nm_config Nodemanager_config) {
 	config.Cmd = viper.GetStringSlice("nodemanager.cmd")
 	config.Entrypoint = viper.GetStringSlice("nodemanager.entrypoint")
 	config.HostConfig = hostConifg
-
 	id, err := client.CreateContainer(config, "", nil)
 	if err != nil {
+		logger.WithFields(logrus.Fields{"Time": time.Now(), "ContainerID": "-", "Action": "CREATE"}).Error(err)
 		panic(err)
 	}
 	container_name := id[0:12]
 	fmt.Println("Container", container_name, "created.")
+	logger.WithFields(logrus.Fields{"Time": time.Now(), "ContainerID": container_name, "Action": "CREATE"}).Info("Create a new nodemanager docker container")
 
 	if nm_config.Container_name != "" {
 		err = client.RenameContainer(container_name, nm_config.Container_name)
 		if err != nil {
+			logger.WithFields(logrus.Fields{"Time": time.Now(), "ContainerID": container_name, "Action": "RENAME"}).Error(err)
 			panic(err)
 		}
 		fmt.Println("Rename container name to", nm_config.Container_name)
+		logger.WithFields(logrus.Fields{"Time": time.Now(), "ContainerID": container_name, "Action": "RENAME"}).Info("Rename container "+container_name+" name to ", nm_config.Container_name)
 	}
 	err = client.StartContainer(id, nil)
 	if err != nil {
+		logger.WithFields(logrus.Fields{"Time": time.Now(), "ContainerID": container_name, "Action": "START"}).Error(err)
 		panic(err)
 	}
 	fmt.Println("Started.")
+	logger.WithFields(logrus.Fields{"Time": time.Now(), "ContainerID": container_name, "Action": "START"}).Info("Start container " + container_name)
 
 }
 

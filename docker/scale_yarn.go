@@ -2,6 +2,8 @@ package docker
 
 import (
 	"fmt"
+	"github.com/Sirupsen/logrus"
+	"github.com/rootsongjc/magpie/utils"
 	"github.com/samalba/dockerclient"
 	"github.com/spf13/viper"
 	"os"
@@ -29,7 +31,9 @@ func Convert_name2ID(name string) string {
 	return container.ID
 }
 
+//Scale yarn cluster with the base container
 func Scale_yarn_cluster(clustername string, numInstances int) {
+	logger := utils.Logger()
 	fmt.Println("Scaling yarn cluster", clustername, "with", numInstances, "containers...")
 	var (
 		errChan = make(chan (error))
@@ -53,10 +57,12 @@ func Scale_yarn_cluster(clustername string, numInstances int) {
 		fmt.Println("The base container ", name, " does not exist.")
 		os.Exit(1)
 	}
+	logger.WithFields(logrus.Fields{"Time": time.Now(), "ContainerID": id, "Action": "SCALE"}).Info("Scale yarn clsuter " + clustername + " with base container " + id + " to " + strconv.Itoa(numInstances) + " nodemanagers")
 	containerInfo, err := client.InspectContainer(id)
 	if err != nil {
 		result.Errors = append(result.Errors, err.Error())
 	}
+	//from shipyard
 	nodes, err := ParseClusterNodes()
 	containers := Get_all_yarn_containers()
 	var hostname = ""
@@ -88,6 +94,7 @@ func Scale_yarn_cluster(clustername string, numInstances int) {
 			defer lock.Unlock()
 			id, err := client.CreateContainer(config, "", nil)
 			fmt.Println("New container created", id)
+			logger.WithFields(logrus.Fields{"Time": time.Now(), "ContainerID": id, "Action": "CREATE"}).Info("Create container " + id)
 			if err != nil {
 				errChan <- err
 				return
@@ -105,7 +112,6 @@ func Scale_yarn_cluster(clustername string, numInstances int) {
 		case id := <-resChan:
 			result.Scaled = append(result.Scaled, id)
 		case err := <-errChan:
-			//log.Errorf("error scaling container: err=%s", strings.TrimSpace(err.Error()))
 			result.Errors = append(result.Errors, strings.TrimSpace(err.Error()))
 		}
 	}
@@ -118,6 +124,7 @@ func Scale_yarn_cluster(clustername string, numInstances int) {
 			var newname string
 			newname = clustername + "-" + time.Now().Format("20060102150405") + "-" + strconv.Itoa(i)
 			fmt.Println("Rename container", oldname, "as", newname)
+			logger.WithFields(logrus.Fields{"Time": time.Now(), "ContainerID": id, "Action": "RENAME"}).Info("Rename container " + oldname + " to " + newname)
 			client.RenameContainer(oldname, newname)
 		}
 	}

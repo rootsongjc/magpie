@@ -3,13 +3,16 @@ package docker
 import (
 	"bufio"
 	"fmt"
+	"github.com/Sirupsen/logrus"
 	dc "github.com/fsouza/go-dockerclient"
+	"github.com/rootsongjc/magpie/utils"
 	"github.com/samalba/dockerclient"
 	"github.com/spf13/viper"
 	"io"
 	"os"
 	"strings"
 	"sync"
+	"time"
 )
 
 //Yarn docker cluster state
@@ -30,6 +33,7 @@ type Yarn_docker_container struct {
 	Ip          string //172.18.12.31
 	Host        string //bj-dc-datanode-078.tendcloud.com
 }
+
 
 //Get the yarn docker cluster status
 func Get_docker_status(cluster_names []string) {
@@ -77,17 +81,22 @@ func Get_docker_status(cluster_names []string) {
 
 //Delete a docker container.
 func Delete_container(id string, wg *sync.WaitGroup) {
-	defer wg.Done()
+	logger:=utils.Logger()
+	if wg != nil {
+		defer wg.Done()
+	}
 	client, err := Swarm_client()
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Removal " + id + " in progress...")
+	fmt.Println("Removal", id, "in progress...")
 	err = client.RemoveContainer(dc.RemoveContainerOptions{ID: id, Force: true})
 	if err != nil {
+		logger.WithFields(logrus.Fields{"Time": time.Now(), "ContainerID": id, "Action": "DELETE"}).Error(err)
 		panic(err)
 	}
-	fmt.Println("Remove ", id, " OK")
+	fmt.Println("Remove", id, "OK")
+	logger.WithFields(logrus.Fields{"Time": time.Now(), "ContainerID": id, "Action": "DELETE"}).Info("Delete container " + id)
 }
 
 //Delete all the docker containers on the host.
@@ -318,5 +327,33 @@ func Get_swarm_nodes_status() {
 	fmt.Println("============================================================================================================")
 	for _, n := range nodes {
 		fmt.Println(n.Name, "\t", n.Addr, "\t", n.Containers, "\t", n.ReservedCPUs, "\t", n.ReservedMemory)
+	}
+}
+
+//Lookup the IP address of hostname
+//Hostname is the 12 byte short container ID.
+func Lookup(hostname string, all bool) {
+	list := Get_all_yarn_containers()
+	var container Yarn_docker_container
+	flag := false
+	for i := range list {
+		c := list[i]
+		if c.ID == hostname {
+			flag = true
+			container = c
+		}
+	}
+	if flag == false {
+		fmt.Println("No such contianer.")
+	} else if all == true {
+		fmt.Println("ID:", container.ID)
+		fmt.Println("CLUSTER:", container.Clustername)
+		fmt.Println("NAME:", container.Name)
+		fmt.Println("STATUS:", container.Status)
+		fmt.Println("STATE:", container.State)
+		fmt.Println("IP:", container.Ip)
+		fmt.Println("HOST", container.Host)
+	} else {
+		fmt.Println("IP:", container.Ip)
 	}
 }

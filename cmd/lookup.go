@@ -15,7 +15,7 @@
 package cmd
 
 import (
-	"github.com/rootsongjc/magpie/utils"
+	"github.com/rootsongjc/magpie/docker"
 	"github.com/spf13/cobra"
 )
 
@@ -28,7 +28,7 @@ var lookupCmd = &cobra.Command{
 	Short: "Lookup a nodemanager container",
 	Long:  "Look up the nodemanager docker container.",
 	Run: func(cmd *cobra.Command, args []string) {
-		utils.Lookup(host, detail)
+		docker.Lookup(host, detail)
 	},
 }
 
