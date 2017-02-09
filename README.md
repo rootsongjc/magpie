@@ -155,6 +155,7 @@ cluster_name = ["yarn1","yarn2","yarn3"]
 #Swarm master ip address
 swarm_master_ip = "192.168.0.1"
 swarm_master_port = "4000"
+nodemanager_exclude_file = "/usr/local/hadoop/etc/hadoop/exclude.txt"
 
 [resource_managers]
 #Yarn active resourcemanager ip address

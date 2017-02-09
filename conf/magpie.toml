@@ -4,6 +4,7 @@ cluster_name = ["yarn1","yarn2","yarn3"]
 #Swarm master ip address
 swarm_master_ip = "192.168.0.1"
 swarm_master_port = "4000"
+nodemanager_exclude_file = "/usr/local/hadoop/etc/hadoop/exclude.txt"
 
 [resource_managers]
 #Yarn active resourcemanager ip address
@@ -12,7 +13,7 @@ yarn2 = "192.168.0.2"
 yarn3 = "192.168.0.3"
 
 [base_container]
-#Base container used for scale the yarn cluster 
+#Base container used for scale the yarn cluster
 yarn1 = "yarn1-nm1"
 yarn2 = "yarn2-nm1"
 yarn3 = "yarn3-nm1"
