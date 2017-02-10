@@ -23,6 +23,8 @@ type docker_cluster_state struct {
 	exited  int
 }
 
+var logger = utils.Logger()
+
 //Yarn nodemanager docker container
 type Yarn_docker_container struct {
 	ID          string
@@ -33,7 +35,6 @@ type Yarn_docker_container struct {
 	Ip          string //172.18.12.31
 	Host        string //bj-dc-datanode-078.tendcloud.com
 }
-
 
 //Get the yarn docker cluster status
 func Get_docker_status(cluster_names []string) {
@@ -81,7 +82,6 @@ func Get_docker_status(cluster_names []string) {
 
 //Delete a docker container.
 func Delete_container(id string, wg *sync.WaitGroup) {
-	logger:=utils.Logger()
 	if wg != nil {
 		defer wg.Done()
 	}
