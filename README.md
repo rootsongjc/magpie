@@ -10,6 +10,8 @@ Build and run an yarn cluster on docker, pass the config item to hadoop configur
 
 ###How to build the docker image and run a container step by step?
 
+*You should follow the [docker project standard](doc/docker_project_standard.md) to build your own docker image.*
+
 - **Step1**
 
   Prepare the direcotries for yarn and chown owner to hadoop.
