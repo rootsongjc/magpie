@@ -44,6 +44,6 @@ func init() {
 	dockerCmd.AddCommand(deleteCmd)
 	deleteCmd.Flags().StringVarP(&hostname, "hostname", "n", "", "Hostname of the containers existed.")
 	deleteCmd.Flags().StringVarP(&containerid, "containerid", "c", "", "Docker container ID.")
-	deleteCmd.Flags().StringVarP(&list, "file", "f", "", "Docker containers list file, each line of a containerID.")
+	deleteCmd.Flags().StringVarP(&list, "file", "f", "", "Docker containers list file, each line of a container name, i.e yarn3-20170214-nm1.")
 
 }
