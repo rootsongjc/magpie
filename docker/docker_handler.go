@@ -352,7 +352,7 @@ func Lookup(hostname string, all bool) {
 		fmt.Println("STATUS:", container.Status)
 		fmt.Println("STATE:", container.State)
 		fmt.Println("IP:", container.Ip)
-		fmt.Println("HOST", container.Host)
+        fmt.Println("HOST:", container.Host)
 	} else {
 		fmt.Println("IP:", container.Ip)
 	}
