@@ -178,8 +178,7 @@ func Decommis_nodemanagers(nodemanagers []string) {
 		yarns[n.Clustername] = yarns[n.Clustername] + "\n" + n.ID
 	}
 	//	yarns := map[string]string{
-	//		"yarn1": `3cd9494cdc80
-	//0ebc7d9cf054`,
+	//		"yarn1": "3cd9494cdc80\n0ebc7d9cf054",
 	//		"yarn2": "falj2ljfao3k",
 	//	}
 	fmt.Println("Decommising the following nodemangers...")
@@ -223,8 +222,8 @@ func decommis_yarn_nodes(clustername string, nodemanagers string, wg *sync.WaitG
 	logger.WithFields(logrus.Fields{"Time": time.Now(), "Cluster": clustername, "Nodemanagers": strings.Replace(nodemanagers, "\n", ",", -1), "Action": "DECOM"}).Info("Decomissing nodemanagers " + nodemanagers)
 	resource_manager_ip := utils.Clustername2ip(clustername)
 	nodemanger_exclude_file := viper.GetString("clusters.nodemanager_exclude_file")
-	//command := "ssh -n root@" + resource_manager_ip + ` "echo -e '` + nodemanagers + `'>>/usr/local/hadoop/etc/hadoop/test.txt"`
-	command := "ssh -n jingchao.song@" + "172.20.0.6" + ` "echo -e '` + nodemanagers + `'>>` + nodemanger_exclude_file + `"`
+	command := "ssh -n root@" + resource_manager_ip + ` "echo -e '` + nodemanagers + `'>>` + nodemanger_exclude_file + `"`
+	//command := "ssh -n jingchao.song@" + "172.20.0.6" + ` "echo -e '` + nodemanagers + `'>>` + "/home/jingchao.song/docker/test.txt"+ `"`
 	//TODO should return result and error handler
 	utils.Run_command(command)
 	command = "ssh -n root@" + resource_manager_ip + ` 'su - hadoop -c "yarn rmadmin -refreshNodes"'`
