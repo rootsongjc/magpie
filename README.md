@@ -1,7 +1,7 @@
 ![magpie logo](doc/img/magpie_logo_small.png)
 ![Build Status](https://travis-ci.org/rootsongjc/magpie.svg?branch=master)
 
-#Magpie  
+# Magpie  
 
 
 Magpie is a command line tool for deploying and  managing the Yarn on Docker cluster.
@@ -10,7 +10,7 @@ Build and run an yarn cluster on docker, pass the config item to hadoop configur
 
 [Design docs - Yarn on Docker](https://rootsongjc.github.io/docker-practice/docs/td_yarn_on_docker.html)
 
-###How to build the docker image and run a container step by step?
+### How to build the docker image and run a container step by step?
 
 *You should follow the [docker project standard](doc/docker_project_standard.md) to build your own docker image.*
 
@@ -36,7 +36,7 @@ Build and run an yarn cluster on docker, pass the config item to hadoop configur
 
 
 
-###Build image
+### Build image
 
 Edit Dockerfile and change the base image to your own JDK7 image.
 
@@ -45,7 +45,7 @@ Edit Dockerfile and change the base image to your own JDK7 image.
 docker build -t hadoop-yarn:v0.1 .
 ```
 
-###Run a container
+### Run a container
 
 For example
 
@@ -65,7 +65,7 @@ docker run -d -e NANENODE_IP=192.168.0.1 -e RESOURCEMANAGER_IP=192.168.0.1 -e YA
 docker run -d -e NANENODE_IP=192.168.0.1 -e RESOURCEMANAGER_IP=192.168.0.1 -e YARN_JOBHISTORY_IP=192.168.0.1 -e HA=no hadoop-yarn:v0.1 nodemanager
 ```
 
-###ENV included with hadoop HA 
+### ENV included with hadoop HA 
 
 - HA (default yes)
 
@@ -91,7 +91,7 @@ docker run -d -e NANENODE_IP=192.168.0.1 -e RESOURCEMANAGER_IP=192.168.0.1 -e YA
 
 - YARN_JOBHISTORY_IP
 
-###ENV included without hadoop HA
+### ENV included without hadoop HA
 
 - NAMENDOE_IP
 
@@ -99,7 +99,7 @@ docker run -d -e NANENODE_IP=192.168.0.1 -e RESOURCEMANAGER_IP=192.168.0.1 -e YA
 
 - HISTORYSERVER_IP
 
-###NodeManager resource limit
+### NodeManager resource limit
 
 - CPU_CORE_NUM
 
@@ -107,13 +107,13 @@ docker run -d -e NANENODE_IP=192.168.0.1 -e RESOURCEMANAGER_IP=192.168.0.1 -e YA
 
   ​
 
-##Magpie CLI management Tool
+## Magpie CLI management Tool
 
-###Precondition
+### Precondition
 - No-password login to all the active resource managers.
 - Docker container's name must contain the cluster name.
 
-###Usage
+### Usage
 
 Use magpie -h for help usage.
 
@@ -140,7 +140,7 @@ Magpie is  a  CLI tool to manage the Yarn on Docker cluster.
 
 ![magpie_commands](doc/img/magpie_commands.png)
 
-###Configuration
+### Configuration
 
 Magpie use [viper](https://github.com/spf13/viper)  to resolve the [toml](https://github.com/toml-lang/toml) configuration file. 
 
@@ -148,7 +148,7 @@ Config file default located at ./conf/magpie.toml
 
 You can use --config to sepcify your custom configuration file.
 
-### Configuration file example###
+### Configuration file example
 
 Most configuration items are inherited from docker image, you don't need to specify in the configuration file, unless you want to modify the docker environment variables in the image.
 
@@ -198,7 +198,7 @@ image = "docker-registry:5000/library/hadoop-yarn:v0.1"
 cmd = ["nodemanager"]
 ```
 
-###Feature
+### Feature
 
 - Inspect the swarm cluster status.
 - Inspect the yarn clsuter status.
@@ -229,12 +229,11 @@ You need to install [goxc](https://github.com/laher/goxc) by yourself.
 
 ###TODO
 
-- The base container should be definited in configuration file first
 - Scale and flux the yarn cluster automatically
 - Nodemanager registered on resourcemanager repeatability
 
 
-###Reference
+### Reference
 
 [Docker remote API version 1.23]( https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/)
 
@@ -243,9 +242,11 @@ You need to install [goxc](https://github.com/laher/goxc) by yourself.
 
 [Swarm API version 1.2.2](https://docs.docker.com/swarm/swarm-api/)
 
-###About
+### About
 
 Author: Jimmy Song rootsongjc@gmail.com
+
+[Jimmy's Blog](http://rootsongjc.github.io)
 
 *FYI: If you want to create a yarn cluster with multiple nodemanagers, you need a docker plugins to make the docker container on different hosts can be accessed with each others.*
 You need a docker ipam plugin to make the continers located on different hosts can be accessed by each others. 
