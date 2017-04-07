@@ -8,7 +8,7 @@ Magpie is a command line tool for deploying and  managing the Yarn on Docker clu
 
 Build and run an yarn cluster on docker, pass the config item to hadoop configuration files through docker ENV.
 
-[Design docs - Yarn on Docker](https://rootsongjc.github.io/docker-practice/docs/td_yarn_on_docker.html)
+[Design docs - Yarn on Docker](https://rootsongjc.github.io/projects/yarn-on-docker/)
 
 ### How to build the docker image and run a container step by step?
 
@@ -244,11 +244,11 @@ You need to install [goxc](https://github.com/laher/goxc) by yourself.
 
 ### About
 
-Author: Jimmy Song 
+Author: [Jimmy Song](rootsongjc.github.io/about)
 
-rootsongjc@gmail.com
+Email: rootsongjc@gmail.com
 
-[Jimmy's Blog](http://rootsongjc.github.io)
+[Jimmy Song's Blog](http://rootsongjc.github.io)
 
 *FYI: If you want to create a yarn cluster with multiple nodemanagers, you need a docker plugins to make the docker container on different hosts can be accessed with each others.*
 You need a docker ipam plugin to make the continers located on different hosts can be accessed by each others. 
