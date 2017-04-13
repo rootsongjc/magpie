@@ -244,7 +244,7 @@ You need to install [goxc](https://github.com/laher/goxc) by yourself.
 
 ### About
 
-Author: [Jimmy Song](rootsongjc.github.io/about)
+Author: [Jimmy Song](http://rootsongjc.github.io/about)
 
 Email: rootsongjc@gmail.com
 
