@@ -99,7 +99,7 @@ func Delete_container(id string, wg *sync.WaitGroup) {
 	logger.WithFields(logrus.Fields{"Time": time.Now(), "ContainerID": id, "Action": "DELETE"}).Info("Delete container " + id)
 }
 
-//Delete all the docker containers on the host.
+//Delete all the yarn docker containers on the host.
 func Delete_containers_on_host(hostname string) {
 	containers, err := Get_all_docker_containers()
 	if err != nil {
@@ -108,7 +108,9 @@ func Delete_containers_on_host(hostname string) {
 		var wg sync.WaitGroup
 		for i := range containers {
 			c := Get_nodemanager_host(containers[i].Names[0])
-			if c == hostname {
+			//DO NOT DELETE THE OTHER CONTAINERS EXCEPT THE YARN DOCKER CONTAINER
+			// FOR EXAMPLE: cAdvisor
+			if c == hostname && strings.HasPrefix(strings.Split(containers[i].Names[0], "/")[2],"yarn"){
 				id := containers[i].ID[0:12]
 				fmt.Println("Delete docker contianer ID:", id, " NAME:", containers[i].Names[0])
 				wg.Add(1)
