@@ -212,20 +212,15 @@ cmd = ["nodemanager"]
 
 **Build environment**
 
-go 1.7.4 adm64
+go 1.7.4 amd64
 
 **Build magpie on your own platform**
 
-```Shell
-go build -o magpie main.go
-```
+Edit `Makefile` to set `GOOS` and `GOARCH`  to your target environment .
 
-**Build for multi-platform**
 ```Shell
-goxc -d=build -pv=1.0.0 -bc='linux,darwin' -arch='amd64'
+make
 ```
-
-You need to install [goxc](https://github.com/laher/goxc) by yourself.
 
 ### TODO
 
