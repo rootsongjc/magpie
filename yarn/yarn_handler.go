@@ -283,6 +283,7 @@ func Create_new_nodemanager(nm_config Nodemanager_config) {
 		CpuShares:   nm_config.Limit_cpus,
 		Memory:      nm_config.Limit_memory_mb * 1024 * 1024, //transform to Byte
 		NetworkMode: nm_config.Network_mode,
+		OomScoreAdj: 500,
 	}
 	var config *dockerclient.ContainerConfig
 	config = new(dockerclient.ContainerConfig)
