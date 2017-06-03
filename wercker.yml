@@ -57,4 +57,4 @@ deploy:
         cmd: /pipeline/source/magpie
         tag: latest
         repository: jimmysong/magpie
-        registry:  https://registry.hub.docker.com
+        registry:  https://registry.hub.docker.com/v2
