@@ -52,8 +52,8 @@ build:
 deploy: 
  steps:
     - internal/docker-push:
-         username: $USERNAME
-         password: $PASSWORD 
+        username: $USERNAME
+        password: $PASSWORD 
         cmd: /pipeline/source/magpie
         tag: latest
         repository: jimmysong/magpie 
