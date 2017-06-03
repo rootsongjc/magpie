@@ -30,7 +30,7 @@ build:
     - script:
         name: go get
         code: |
-          go get
+          go get github.com/rootsongjc/magpie
 
     # Build the project
     - script:
