@@ -43,3 +43,18 @@ build:
         name: go test
         code: |
           go test ./...
+
+    - script:
+        name: copy files to wercker output 
+        code: |
+          cp -R ./ ${WERCKER_OUTPUT_DIR}
+
+deploy: 
+ steps:
+    - internal/docker-push:
+         username: $DOCKER_USERNAME
+         password: $DOCKER_PASSWORD 
+        cmd: /pipeline/source/magpie
+        tag: latest
+        repository: jimmysong/magpie 
+        registry:  https://registry.hub.docker.com
