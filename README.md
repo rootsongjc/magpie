@@ -8,7 +8,6 @@ Magpie is a command line tool for deploying and  managing the Yarn on Docker clu
 
 Build and run an yarn cluster on docker, pass the config item to hadoop configuration files through docker ENV.
 
-[Design docs - Yarn on Docker](http://rootsongjc.github.io/projects/yarn-on-docker/)
 
 ### How to build the docker image and run a container step by step?
 
@@ -228,14 +227,11 @@ make
 - Nodemanager registered on resourcemanager repeatability
 
 
-### Reference
+### References
 
-[Docker remote API version 1.23]( https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/)
-
-
-[YARN RESTful API version 2.6.0]( https://hadoop.apache.org/docs/r2.6.0/hadoop-yarn/hadoop-yarn-site/ResourceManagerRest.html)
-
-[Swarm API version 1.2.2](https://docs.docker.com/swarm/swarm-api/)
+- [Docker remote API version 1.23]( https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/)
+- [YARN RESTful API version 2.6.0]( https://hadoop.apache.org/docs/r2.6.0/hadoop-yarn/hadoop-yarn-site/ResourceManagerRest.html)
+- [Swarm API version 1.2.2](https://docs.docker.com/swarm/swarm-api/)
 
 ### About
 
