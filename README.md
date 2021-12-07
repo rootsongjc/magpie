@@ -239,12 +239,6 @@ make
 
 ### About
 
-Author: [Jimmy Song](http://rootsongjc.github.io/about)
-
-Email: rootsongjc@gmail.com
-
-[Jimmy Song's Blog](http://rootsongjc.github.io)
-
 *FYI: If you want to create a yarn cluster with multiple nodemanagers, you need a docker plugins to make the docker container on different hosts can be accessed with each others.*
 You need a docker ipam plugin to make the continers located on different hosts can be accessed by each others. 
 Try this:https://github.com/rootsongjc/docker-ipam-plugin
